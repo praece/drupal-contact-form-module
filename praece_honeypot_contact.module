@@ -1,0 +1,26 @@
+<?php
+/**
+ * @file
+ * Code for the Praece Honeypot Contact feature.
+ */
+
+include_once 'praece_honeypot_contact.features.inc';
+
+function praece_honeypot_contact_form_alter(&$form, &$form_state, $form_id) {
+	if ($form_id == 'contact_node_form') {
+		$form['actions']['submit']['#ajax'] = array(
+      'callback' => 'none',
+      'progress' => array(
+        'type' => 'none',
+      ),
+      'event' => 'ajaxFormSubmit',
+      'prevent' => '',
+    );
+
+		$form['actions']['submit']['#value'] = 'Send';
+
+		$form_state['cache'] = TRUE;
+    $form_state['build_info']['files'][] = array('type' => 'inc', 'module' => 'node', 'name' => 'node.pages');
+    $form['#attached']['js'][] = drupal_get_path('module', 'praece_honeypot_contact') . '/praece-honeypot-contact.contact-form.js';
+	}
+}
